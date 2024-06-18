@@ -1,3 +1,7 @@
+"""
+Usage example.
+"""
+
 from conllu import parse
 from complexity import TextComplexity, SentenceComplexity
 
