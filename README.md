@@ -1,20 +1,20 @@
 # syntaxcomp
-This package is designed for calculating syntactic complexity measures of
-morphosyntactically annotated texts in
+This package is designed for calculating syntactic complexity measures on 
+the basis of morphosyntactically annotated texts in
 [CoNLL-U format](https://universaldependencies.org/format.html).
-It also enables T-unit and clause extraction. 
+It also enables T-unit and clause extraction.
+
+**Disclaimer**: correct results are only guaranteed for texts annotated with
+[UDPipe 2.12](https://lindat.mff.cuni.cz/services/udpipe/api-reference.php).
 Please note that syntaxcomp relies heavily on
 [CoNLL-U Parser](https://pypi.org/project/conllu/).
-
-**Disclaimer**: Correct results are only guaranteed for texts annotated with
-[UDPipe 2.12](https://lindat.mff.cuni.cz/services/udpipe/api-reference.php).
 
 ## Installation
 ```bash
 pip install syntaxcomp
 ```
 
-## Example Usage
+## Usage Example
 ```python
 >>> from syntaxcomp.complexity import SentenceComplexity, TextComplexity
 

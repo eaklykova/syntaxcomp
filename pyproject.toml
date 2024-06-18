@@ -20,7 +20,8 @@ description = "A package for extracting syntactic complexity measures from CoNLL
 readme = "README.md"
 keywords = [
     "complexity", "syntax", "syntactic complexity", "text complexity",
-    "conllu", "udpipe", "clause extraction", "clause segmentation"
+    "conllu", "udpipe", "clause extraction", "sentence segmentation",
+    "clause segmentation"
 ]
 classifiers = [
 	"Development Status :: 3 - Alpha",
