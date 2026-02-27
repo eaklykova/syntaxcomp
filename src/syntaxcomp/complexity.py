@@ -3,7 +3,7 @@ Get CoNLL-U annotations and calculate syntactic complexity measures.
 """
 
 from __future__ import annotations
-from typing import Any
+from typing import Any, Union
 from statistics import mean, median, StatisticsError
 from itertools import combinations
 
@@ -51,9 +51,9 @@ class SentenceComplexity:
                 # dependency distances
                 self.dep_dists.append(abs(token['head'] - token['id']))
                 # T-unit extraction
-                if (token['deprel'] in {'root', 'parataxis'} or
-                        (token['deprel'] == 'conj' and
-                         token['upos'] == 'VERB')):
+                if (token['deprel'] in {'ROOT', 'root', 'parataxis'} or
+                    (token['deprel'] == 'conj' and
+                     token['upos'] == 'VERB')):
                     self.t_heads.append(token['id'])
                     self.c_heads.append(token['id'])
                 # clause extraction
@@ -100,7 +100,9 @@ class SentenceComplexity:
             return 1
         return 1 + max(self.get_tree_depth(child) for child in root.children)
 
-    def get_curr_node(self, root: conllu.models.TokenTree, curr_id: int):
+    def get_curr_node(
+        self, root: conllu.models.TokenTree, curr_id: int
+    ):
         """
         Get current node as conllu.models.Token.
         :param root: root of the tree
@@ -218,7 +220,7 @@ class SentenceComplexity:
             nps.append(np)
         return nps
 
-    def info(self):
+    def info(self, print_: bool = True) -> Union[dict[str, Any], None]:
         """
         Prints main sentence complexity features in a convenient format.
         :return: None
@@ -234,8 +236,11 @@ class SentenceComplexity:
                  'Mean Dependency Distance': round(mean(self.dep_dists), 2),
                  'POS Chain': self.pos_chain,
                  'deprel Chain': self.dep_chain}
-        for key, value in attrs.items():
-            print(f'{key}: {value}')
+        if print_:
+            for key, value in attrs.items():
+                print(f'{key}: {value}')
+        else:
+            return attrs
 
 
 class TextComplexity:
@@ -267,9 +272,9 @@ class TextComplexity:
         pos_chains, dep_chains, tree_depths = [], [], []
         dep_dists, terminal, all_nodes, nps = [], [], [], []
         self.clause_counter = dict.fromkeys(
-            ['root', 'acl', 'acl:relcl', 'advcl', 'advcl:relcl', 'ccomp',
-             'csubj', 'csubj:outer', 'nsubj:outer', 'parataxis', 'xcomp',
-             'conj'], 0)
+            ['ROOT', 'root', 'acl', 'acl:relcl', 'advcl', 'advcl:relcl',
+             'ccomp', 'csubj', 'csubj:outer', 'nsubj:outer',
+             'parataxis', 'xcomp', 'conj'], 0)
 
         for sentence in self.sentences:
             # initialize SentenceComplexity instances
@@ -364,7 +369,8 @@ class TextComplexity:
         """
         return [levenshtein.distance(a, b) for a, b in combinations(chains, 2)]
 
-    def info(self):
+    def info(self, print_: bool = True) -> Union[dict[str, Union[float, int]],
+                                                 None]:
         """
         Prints main text complexity features in a convenient format.
         :return: None
@@ -403,9 +409,20 @@ class TextComplexity:
                      round(self.coord_to_sent, 2),
                  'Subordinate Clause to Sentence Ratio':
                      round(self.subord_to_sent, 2)}
-        for key, val in attrs.items():
-            print(f'{key}: {val}')
-        for deprel, percentage in self.clause_percentage.items():
-            if percentage > 0:
-                print(f'Percentage of {deprel} Clauses: '
-                      f'{round(percentage * 100, 0)}%')
+
+        if print_:
+            for key, val in attrs.items():
+                print(f'{key}: {val}')
+            for deprel, percentage in self.clause_percentage.items():
+                if percentage > 0:
+                    print(f'Percentage of {deprel} Clauses: '
+                        f'{round(percentage * 100, 0)}%')
+        else:
+            output_ = {
+                **attrs,
+                **{
+                    f'{key}_ratio': val
+                    for key, val in self.clause_percentage.items()
+                }
+            }
+            return output_

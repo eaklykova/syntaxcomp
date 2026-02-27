@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "syntaxcomp"
-version = "0.0.1"
+version = "0.0.2"
 dependencies = [
   "conllu~=4.5.3",
   "textdistance~=4.6.2",

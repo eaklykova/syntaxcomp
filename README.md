@@ -113,3 +113,10 @@ This is a text containing two sentences.
             (deprel:nummod) form:two lemma:two upos:NUM [6]
     (deprel:punct) form:. lemma:. upos:PUNCT [8]
 ```
+## CHANGELOG
+
+### v 0.0.2
+
+ - Added support for uppercase "ROOT" tag for compatibility with SpaCy ru_core_news model (https://spacy.io/models/ru#ru_core_news_lg)
+ - Added `print_` option to `.info()` method (default=True). With `print_=False` .info() returns dict without printing anything.
+ - Shorter imports - `from syntaxcomp import SentenceComplexity, TextComplexity`

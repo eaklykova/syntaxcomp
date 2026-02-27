@@ -3,3 +3,7 @@
 /src/syntaxcomp/__pycache__
 /dist
 /src/syntaxcomp.egg-info
+/.venv
+/notebooks
+/data
+*.lock
